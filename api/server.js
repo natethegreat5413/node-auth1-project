@@ -26,7 +26,7 @@ const sessionConfig = {
         tablename: 'sessions',
         sidfieldname: 'sid',
         createtable: true,
-        clearInterval: 6000, // delet expired sessions
+        clearInterval: 6000, // delete expired sessions
     }),
 };
 
@@ -40,6 +40,18 @@ server.use('/api/auth', authRouter);
 
 server.get('/', (req, res) => {
     res.json({ api: 'up'})
+})
+
+server.get('/hash', (req, res) => {
+    try {
+        const password = req.headers.password;
+        const rounds = process.env.HASH_ROUNDS || 8;
+        const hash = bcrypt.hashSync(password, rounds);
+
+        res.status(200).json({ password, hash })
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
 })
 
 module.exports = server;
