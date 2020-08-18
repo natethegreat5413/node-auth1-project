@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const bcrypt = require('bcryptjs')
+const bcryptjs = require('bcryptjs')
 
 const Users = require('../users/users-model')
 
@@ -7,7 +7,7 @@ router.post('/register', (req, res) => {
     const { username, password } = req.body;
 
     const rounds = process.env.HASH_ROUNDS || 12;
-    const hash = brypt.hashSync(password, rounds);
+    const hash = bcryptjs.hashSync(password, rounds);
 
     Users.add({ username, password: hash })
     .then(user => {
@@ -23,9 +23,9 @@ router.post('/login', (req, res) => {
     .then(users => {
         const user = users[0];
 
-        if (user && bvrypt.compareSync(password, user.password)) {
+        if (user && bcryptjs.compareSync(password, user.password)) {
             req.session.loggedIn = true;
-            req.status(200).json({
+            res.status(200).json({
                 hello: user.username,
                 session: req.session,
             })
