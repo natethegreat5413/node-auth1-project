@@ -12,8 +12,6 @@ const dbConfig = require('../data/dbConfig')
 const protectedMW = require('../protected/protected-mw')
 
 
-const server = express()
-
 const sessionConfig = {
     name: "monster",
     secret: process.env.SESSION_SECRET || "keep it secret, keep it safe!",
@@ -26,7 +24,7 @@ const sessionConfig = {
     },
     // saves session information to a table
     store: new KnexSessionStore({
-      knex: connection, // knex connection to the database
+      knex: dbConfig, // knex connection to the database
       tablename: 'sessions',
       sidfieldname: 'sid',
       createTable: true,
